@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-]
+from .views import ping
+
+# Lists URLS to views
+# path - URL, ping - route function view, name - ???
+# localhost:8009/ping/ -> return json data defined in views.ping
+urlpatterns = [path("admin/", admin.site.urls), path("ping/", ping, name="ping")]
