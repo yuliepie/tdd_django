@@ -10,3 +10,15 @@ services:
       - 8009:8000 # map to pc port 8009
     env_file:
       - ./app/.env.dev # loads env variables onto container
+
+  movies-db:
+    image: postgres:14-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/ # bind postgres_data volume
+    environment:
+      - POSTGRES_USER=movies # default superuser
+      - POSTGRES_PASSWORD=movies # superuser password
+      - POSTGRES_DB=movies_dev # default database
+
+volumes:
+  postgres_data:

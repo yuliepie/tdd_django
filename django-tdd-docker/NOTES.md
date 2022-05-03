@@ -48,3 +48,38 @@ docker-compose logs -f # view logs
 
 docker-compose down -v # Bring down container incl. volume
 ```
+## Postgres DB
+- add postgresDB service to docker-compose (set default user and DB name)
+- add env variables for django to communicate with postgresDB container, and link those env variables in `settings.py`
+- install postgres dependency for docker app service
+- add Psycopg2 postgresDB driver to requirements.txt
+- Build image and spin up containers: `docker-compose up -d --build`
+- Run migrations to new postgresDB: `docker-compose exec movies python manage.py migrate --noinput`
+  - *NOTE*: if migration causes error due to Mac M1, build docker platform on linux by including in docker-compose service argument: `platform: linux/amd64`
+- available on default port `5432` for other services
+
+### Checking with psql command
+```shell
+$ docker-compose exec movies-db psql --username=movies --dbname=movies_dev
+
+# list databases
+\l
+
+# connect to movies_dev DB
+\c movies_dev
+
+# list of tables
+\dt
+
+#quit
+\q
+```
+- Check volume for DB is created: (host_volumename)
+```
+docker volume inspect django-tdd-docker_postgres_data
+```
+## Entrypoint script
+- On movies service startup, wait for postgres container to be available in `entrypoint.sh` file
+- Once postgres available, run the migration script (in the file)
+- Update file permissions: `$ chmod +x app/entrypoint.sh`
+- Update Dockerfile
