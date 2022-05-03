@@ -95,3 +95,21 @@ docker volume inspect django-tdd-docker_postgres_data
 - `pytest.ini` file: define `DJANG_SETTINGS_MODULE` variable to point to Django settings file & test discovery rules
 - After adding pytest as requirement, rebuild docker images
 - Run tests: `docker-compose exec movies pytest`
+
+# Django REST Framework (DRF)
+- full-featured API framework to build REST APIs with Django
+- Composed of:
+- **Serializers**: converts Django querysets and model instances to and from JSON (serialization & deserialization)
+- **Views**: 
+  - handle HTTP requests and return serialized data. View uses serializers to validate incoming payloads, and contains logic to return response.
+  - Coupled with routers, which *map the views with URL endpoints*
+  - ViewSets: a class that combines logic for related views. Similar to a Controller.
+
+# Models
+- Django ORM <-> database
+- After creating models, make migrations & migrate
+```shell
+$ docker-compose exec movies python manage.py makemigrations
+
+$ docker-compose exec movies python manage.py migrate
+```
