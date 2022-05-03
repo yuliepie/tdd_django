@@ -81,5 +81,8 @@ docker volume inspect django-tdd-docker_postgres_data
 ## Entrypoint script
 - On movies service startup, wait for postgres container to be available in `entrypoint.sh` file
 - Once postgres available, run the migration script (in the file)
-- Update file permissions: `$ chmod +x app/entrypoint.sh`
-- Update Dockerfile
+- Update file permissions locally: `$ chmod +x app/entrypoint.sh`
+- Update Dockerfile to include dependency (netcat) for running entrypoint file, and copy and run the file
+### Check everything works:
+- `docker-compose up -d --build`
+- navigate to localhost:8009
