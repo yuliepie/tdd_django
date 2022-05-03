@@ -36,3 +36,15 @@ sqlite> .exit
 (env)$ python manage.py runserver
 ```
 - navigate to `http://localhost:8000/admin/` to view django admin page (CMS) with superuser credentials
+
+## Docker
+- Create Dockerfile that loads app to container. Set docker-compose to build app service with appropriate .env file.
+- view dev server at `localhost:8009`
+```shell
+docker-compose build
+docker-compose up -d
+
+docker-compose logs -f # view logs
+
+docker-compose down -v # Bring down container incl. volume
+```

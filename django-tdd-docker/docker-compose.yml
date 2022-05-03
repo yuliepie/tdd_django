@@ -7,6 +7,6 @@ services:
     volumes:
       - ./app/:/usr/src/app/ # mounts app code to container. Updates container when code change is made, without rebuilding image.
     ports:
-      - 8009:8000
+      - 8009:8000 # map to pc port 8009
     env_file:
-      - ./app/.env.dev
+      - ./app/.env.dev # loads env variables onto container
