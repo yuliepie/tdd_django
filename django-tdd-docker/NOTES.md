@@ -113,3 +113,6 @@ $ docker-compose exec movies python manage.py makemigrations
 
 $ docker-compose exec movies python manage.py migrate
 ```
+- Add to Django admin page in `admin.py`
+  - Create superuser account
+  - Login and add new movies
