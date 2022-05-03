@@ -86,3 +86,12 @@ docker volume inspect django-tdd-docker_postgres_data
 ### Check everything works:
 - `docker-compose up -d --build`
 - navigate to localhost:8009
+
+# Pytest
+- pytest discovers test files that start or end with `test`
+- Test functions must begin with `test_`
+- Test classes must also begin with `Test`
+- Unlike unittest, pytest does not need Test classes. Test functions just work
+- `pytest.ini` file: define `DJANG_SETTINGS_MODULE` variable to point to Django settings file & test discovery rules
+- After adding pytest as requirement, rebuild docker images
+- Run tests: `docker-compose exec movies pytest`
