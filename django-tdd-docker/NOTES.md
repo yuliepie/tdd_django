@@ -116,3 +116,9 @@ $ docker-compose exec movies python manage.py migrate
 - Add to Django admin page in `admin.py`
   - Create superuser account
   - Login and add new movies
+
+## Serializers
+- converts django models <-> json
+- Have to be created for each model (see MovieSerializer)
+- Most serializers are tied to a model via the `ModelSerializer` class, which outputs all fields of the model, while dealing with read-only ones.
+- However, this doesn't mean ALL serializers need to be tied to a model. Some REST Apis may not need model data, right?
