@@ -89,23 +89,32 @@ docker volume inspect django-tdd-docker_postgres_data
 
 # Pytest
 - pytest discovers test files that start or end with `test`
-- Test functions must begin with `test_`
-- Test classes must also begin with `Test`
+  - Test functions must begin with `test_`
+  - Test classes must also begin with `Test`
 - Unlike unittest, pytest does not need Test classes. Test functions just work
 - `pytest.ini` file: define `DJANG_SETTINGS_MODULE` variable to point to Django settings file & test discovery rules
 - After adding pytest as requirement, rebuild docker images
+### Running Tests
 - Run tests: `docker-compose exec movies pytest`
+- e.g. run tests with `models` in their names:
+```shell
+docker-compose exec movies pytest -k models
+```
+### Test requiring database
+- Mark tests that require database access with `@pytest.mark.django_db`
+- Ensures DB is setup correctly before the test
+- Test will run a db transaction which will be **rolled back after the test completes**.
 
 # Django REST Framework (DRF)
 - full-featured API framework to build REST APIs with Django
 - Composed of:
 - **Serializers**: converts Django querysets and model instances to and from JSON (serialization & deserialization)
 - **Views**: 
-  - handle HTTP requests and return serialized data. View uses serializers to validate incoming payloads, and contains logic to return response.
+  - Classes/Functions that handle HTTP requests and return serialized data as HTTP response. View uses serializers to validate incoming payloads, and contains logic to return response.
   - Coupled with routers, which *map the views with URL endpoints*
   - ViewSets: a class that combines logic for related views. Similar to a Controller.
 
-# Models
+## Models
 - Django ORM <-> database
 - After creating models, make migrations & migrate
 ```shell
@@ -120,5 +129,35 @@ $ docker-compose exec movies python manage.py migrate
 ## Serializers
 - converts django models <-> json
 - Have to be created for each model (see MovieSerializer)
-- Most serializers are tied to a model via the `ModelSerializer` class, which outputs all fields of the model, while dealing with read-only ones.
+- Most serializers are tied to a model via the `ModelSerializer` class
+  - ModelSerializer takes a particular model, and outputs all fields of the model, while dealing with read-only ones.
+  - Can take json object as `data` parameter, and serialize the data into a **Django model instance**
+  - Can save the serialized model into the db
 - However, this doesn't mean ALL serializers need to be tied to a model. Some REST Apis may not need model data, right?
+
+## Views
+- DRF views are functions/classes that take HTTP requests and return HTTP responses
+- 3 types: Views, ViewSets, Generic Views
+### 1. Views
+- Most basic DRF view type, subclasses Django's `View` class
+- function: `@api_view` decorator
+- class: `APIView` class
+### 2. ViewSets
+- layer of abstraction above views
+- Combine CRUD operation logic into a single place
+- Helps with URL consistency, minimizes code, helps focus on the API logic by simplifiying
+- Good for basic CRUD operations, but not for complex API that does not map exactly to existing models
+### 3. Generic Views
+- Takes abstraction layer further
+- One blueprint for several model APIs
+- Infers response format, allowed API methods, payload shape - based on serializer
+> This tutorial project uses the View type, using the `APIView` class
+
+## URLs
+- Define url endpoint patterns for the app in `movieApp/urls.py`
+- Map API urls <-> Views
+- Add app-specific URLs to the project level by updating `drf_project/urls.py`, like adding a blueprint in Flask
+  - use the `include` functionality in django.urls
+
+> TIP: sent HTTP requests from the command line with HTTPie
+> `http --json POST http://localhost:8009/api/movies/ title=Fargo genre=comedy year=1996`
