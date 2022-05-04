@@ -12,9 +12,16 @@ from .serializers import MovieSerializer
 # All movies
 class MovieList(APIView):
     # Define HTTP request method as function name
+    def get(self, request, format=None):
+        movies = Movie.objects.all()
+        serializer = MovieSerializer(movies, many=True)  # Serialize movies data to JSON
+        return Response(serializer.data)
+
     def post(self, request, format=None):
-        # Serializer takes JSON data and converts to Movie object
-        serializer = MovieSerializer(data=request.data)
+        serializer = MovieSerializer(
+            data=request.data
+        )  # Serializer takes JSON data and converts to Movie object
+
         if serializer.is_valid():
             serializer.save()  # Save model with json data
             return Response(
