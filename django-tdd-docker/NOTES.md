@@ -105,6 +105,36 @@ docker-compose exec movies pytest -k models
 - Ensures DB is setup correctly before the test
 - Test will run a db transaction which will be **rolled back after the test completes**.
 
+### Useful Pytest Commands
+```shell
+# normal run
+$ docker-compose exec movies pytest
+
+# disable warnings
+$ docker-compose exec movies pytest -p no:warnings
+
+# run only the last failed tests
+$ docker-compose exec movies pytest --lf
+
+# run only the tests with names that match the string expression
+$ docker-compose exec movies pytest -k "movie and not all_movies"
+
+# stop the test session after the first failure
+$ docker-compose exec movies pytest -x
+
+# enter PDB after first failure then end the test session
+$ docker-compose exec movies pytest -x --pdb
+
+# stop the test run after two failures
+$ docker-compose exec movies pytest --maxfail=2
+
+# show local variables in tracebacks
+$ docker-compose exec movies pytest -l
+
+# list the 2 slowest tests
+$ docker-compose exec movies pytest --durations=2
+```
+
 # Django REST Framework (DRF)
 - full-featured API framework to build REST APIs with Django
 - Composed of:
@@ -162,3 +192,11 @@ $ docker-compose exec movies python manage.py migrate
 > TIP: sent HTTP requests from the command line with HTTPie
 > `$ http --json POST http://localhost:8009/api/movies/ title=Fargo genre=comedy year=1996` (POST)
 > `$ http --json http://localhost:8009/api/movies/1/` (GET)
+
+## Database Seed
+- Add json file with seed data
+- To seed db with data in the file, run:
+```shell
+$ docker-compose exec movies python manage.py flush # empty all data
+$ docker-compose exec movies python manage.py loaddata movies.json
+```
