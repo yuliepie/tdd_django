@@ -160,4 +160,5 @@ $ docker-compose exec movies python manage.py migrate
   - use the `include` functionality in django.urls
 
 > TIP: sent HTTP requests from the command line with HTTPie
-> `http --json POST http://localhost:8009/api/movies/ title=Fargo genre=comedy year=1996`
+> `$ http --json POST http://localhost:8009/api/movies/ title=Fargo genre=comedy year=1996` (POST)
+> `$ http --json http://localhost:8009/api/movies/1/` (GET)

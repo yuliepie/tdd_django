@@ -57,3 +57,19 @@ def test_add_movie_invalid_json_keys(client):
 
     movies = Movie.objects.all()
     assert len(movies) == 0
+
+
+@pytest.mark.django_db
+def test_get_single_movie(client, add_movie):
+    # Create and insert movie to DB
+    movie = add_movie(title="The Big Lebowski", genre="comedy", year="1998")
+
+    # GET movie with id
+    resp = client.get(f"/api/movies/{movie.id}/")
+    assert resp.status_code == 200
+    assert resp.data["title"] == "The Big Lebowski"
+
+
+def test_get_single_movie_incorrect_id(client):
+    resp = client.get(f"/api/movies/foo/")
+    assert resp.status_code == 404
